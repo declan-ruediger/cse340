@@ -13,6 +13,17 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// Define the navigation links used by the header partial
+const navLinks = [
+    { href: '/', label: 'Home' },
+    { href: '/organizations', label: 'Organizations' },
+    { href: '/projects', label: 'Projects' },
+    { href: '/categories', label: 'Categories' },
+];
+
+// Make static application data available to all views
+app.locals.navLinks = navLinks;
+
 /**
   * Configure Express middleware
   */
@@ -25,6 +36,12 @@ app.set('view engine', 'ejs');
 
 // Tell Express where to find your templates
 app.set('views', path.join(__dirname, 'src/views'));
+
+// Make the current request path available to all views
+app.use((req, res, next) => {
+    res.locals.activePage = req.path;
+    next();
+});
 
 /**
   * Routes
